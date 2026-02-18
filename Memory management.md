@@ -1,15 +1,5 @@
 **1. What is memory management in system programming?**
 
-| Aspect       | Physical Memory (RAM)                         | Virtual Memory                                  |
-|--------------|-----------------------------------------------|------------------------------------------------|
-| Nature       | Real hardware (e.g., DRAM modules)            | Logical abstraction using disk storage         |
-| Speed        | Very fast, direct CPU access                  | Slower due to disk I/O                         |
-| Size Limit   | Fixed by installed RAM                        | Larger, depends on disk space                  |
-| Access       | Directly accessed by CPU                      | Accessed via MMU and page tables               |
-| Purpose      | Used for active program execution             | Supports multitasking and running larger apps  |
-
-
-
 A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. 
 
 **Core Functions**
@@ -40,19 +30,14 @@ A. Physical memory, or RAM, is the actual hardware chips in a computer that stor
 
 **Key Differences**
 
-| Aspect  | Physical Memory (RAM)     | Virtual Memory   |
+| Aspect       | Physical Memory (RAM)                         | Virtual Memory                                  |
+|--------------|-----------------------------------------------|------------------------------------------------|
+| Nature       | Real hardware (e.g., DRAM modules)            | Logical abstraction using disk storage         |
+| Speed        | Very fast, direct CPU access                  | Slower due to disk I/O                         |
+| Size Limit   | Fixed by installed RAM                        | Larger, depends on disk space                  |
+| Access       | Directly accessed by CPU                      | Accessed via MMU and page tables               |
+| Purpose      | Used for active program execution             | Supports multitasking and running larger apps  |
 
-|  :---  |   :---   |   :---   |
-
-| Nature         | Real hardware (e.g., DRAM modules)    | Logical abstraction via disk |
-
-| Speed          | Very fast direct CPU access           | Slower due to disk I/O |
-
-| Size Limit     | Fixed by installed RAM                | Much larger, disk-dependent  |
-
-| Access         | Direct by CPU                         | Mapped via MMU/page tables  |
-
-| Purpose        | Active program execution              | Multitasking, run larger apps |
 
 Physical memory holds running data; virtual enables efficient sharing without exhaustion. 
 
@@ -227,21 +212,15 @@ A.  Paging and segmentation are two memory management schemes that handle logica
 
 
 
-## Key Differences
+**Key Differences**
 
-| Aspect              | Paging                              | Segmentation                       |
-
-|:---------------------|:-------------------------------------|:------------------------------------|
-
-| Block Size         | Fixed (e.g., 4KB pages/frames)  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/) | Variable (program-defined)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-paging-and-segmentation/) |
-
-| Fragmentation      | Internal only  [testbook](https://testbook.com/key-differences/difference-between-paging-and-segmentation)            | External mainly  [cseweb.ucsd](https://cseweb.ucsd.edu/classes/sp17/cse120-a/applications/ln/lecture11and12.html)           |
-
-| Visibility         | Transparent to user/OS-managed  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/) | Programmer-visible  [tutorialspoint](https://www.tutorialspoint.com/difference-between-paging-and-segmentation)     |
-
-| Access Speed       | Faster (simpler tables)  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/)  | Slower (bounds checking)  [testbook](https://testbook.com/key-differences/difference-between-paging-and-segmentation)|
-
-| Sharing/Protection | Page-level  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-paging-and-segmentation/)               | Segment-level (e.g., code/data)  [enterprisestorageforum](https://www.enterprisestorageforum.com/hardware/paging-and-segmentation/)|
+| Aspect              | Paging                                   | Segmentation                                  |
+|---------------------|-------------------------------------------|-----------------------------------------------|
+| Block Size          | Fixed size (e.g., 4KB pages/frames)       | Variable size (defined by program)            |
+| Fragmentation       | Internal fragmentation                    | External fragmentation                        |
+| Visibility          | Transparent to user (OS-managed)          | Visible to programmer                         |
+| Access Speed        | Faster (simpler page tables)              | Slower (requires bounds checking)             |
+| Sharing/Protection  | Page-level protection and sharing         | Segment-level protection (e.g., code/data)    |
 
 
 
@@ -441,17 +420,13 @@ A. Page replacement algorithms decide which physical page (frame) to evict from 
 
 **Common Algorithms**
 
-| Algorithm | Description | Pros/Cons |
+| Algorithm | Description                                                       | Pros / Cons                                                     |
+|------------|-------------------------------------------------------------------|-----------------------------------------------------------------|
+| FIFO       | Replaces the oldest loaded page (queue-based).                   | Simple; suffers from Belady's anomaly (more frames → more faults). |
+| Optimal    | Replaces the page that will not be used for the longest time in future. | Produces minimum page faults; not practical (requires future knowledge). |
+| LRU        | Removes the least recently used page (uses stack or time counters). | Good performance with locality; hardware or overhead intensive. |
+| LFU        | Evicts the least fre
 
-|:-----------|:-------------|:-----------|
-
-| **FIFO** | Replaces oldest loaded page (queue-based).  [bunksallowed](https://www.bunksallowed.com/2023/09/page-replacement-algorithms-in-virtual-memory.html) | Simple; suffers Belady's anomaly (more frames = more faults). |
-
-| **Optimal** | Evicts page unused longest in future (ideal benchmark).  [nailyourinterview](https://nailyourinterview.org/interview-resources/operating-systems/page-replacement-algorithms) | Lowest faults; unrealizable without foresight. |
-
-| **LRU** | Removes least recently used page (stack/time counters).  [tutorialspoint](https://www.tutorialspoint.com/operating_system/os_page_replacement_algorithms.htm) | Effective locality; hardware-intensive. |
-
-| **LFU** | Evicts least frequently accessed (counters).  [nailyourinterview](https://nailyourinterview.org/interview-resources/operating-systems/page-replacement-algorithms) | Good for steady patterns; ignores recency. |
 
 
 
