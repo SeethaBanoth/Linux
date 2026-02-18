@@ -38,7 +38,7 @@ A. Physical memory, or RAM, is the actual hardware chips in a computer that stor
 
 | Aspect  | Physical Memory (RAM)     | Virtual Memory   |
 
-|:---|:---|:---|
+|  :---  |   :---   |   :---   |
 
 | Nature         | Real hardware (e.g., DRAM modules)    | Logical abstraction via disk |
 
