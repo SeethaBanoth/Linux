@@ -1,5 +1,11 @@
 **1. What is memory management in system programming?**
 
+| Command | Description |
+| :--- | :---: |
+| `git status` | List all new or modified files |
+| `git diff` | Show file differences that haven't been staged |
+
+
 A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. 
 
 **Core Functions**
@@ -15,10 +21,12 @@ Imagine RAM as a shared apartment: the OS (landlord) assigns rooms to tenants (p
 
 A.  **Virtual memory** is a memory management technique that creates the illusion of having more RAM than physically available. The operating system uses part of the hard disk or SSD as an extension of RAM, swapping less-used data (pages) to disk when RAM fills up. 
 
+
 **How It Works**
 Programs see a large, continuous virtual address space mapped by the MMU to physical RAM or disk. On a page fault (needed data on disk), the OS loads it into RAM, possibly evicting another page.
 
 **Benefits and Drawbacks**
+
 It enables multitasking and running big apps on limited RAM without crashes. However, disk swaps slow performance compared to pure RAM access. [savemyexams]
 
 **3. Differentiate between physical memory and virtual memory.**
@@ -28,7 +36,7 @@ A. Physical memory, or RAM, is the actual hardware chips in a computer that stor
 
 **Key Differences**
 
-| Aspect          | Physical Memory (RAM)                  | Virtual Memory                       |
+| Aspect  | Physical Memory (RAM)     | Virtual Memory   |
 
 |:---|:---|:---|
 
@@ -49,9 +57,11 @@ Physical memory holds running data; virtual enables efficient sharing without ex
 A. The operating system plays a central role in memory management by efficiently allocating, tracking, and protecting RAM usage among processes. 
 
 **Key Responsibilities**
+
 It keeps track of used and free memory locations, assigns blocks to programs as needed, and reclaims space when processes end. The OS also handles address translation via the MMU, preventing one process from accessing another's memory for security.
 
 **Additional Functions**
+
 It implements virtual memory by swapping pages to disk during shortages, enables multitasking, and minimizes fragmentation through techniques like paging and segmentation. This boosts performance and stability.
 
 **5. Explain the purpose of memory allocation.**
@@ -59,9 +69,11 @@ It implements virtual memory by swapping pages to disk during shortages, enables
 A. **Memory allocation** reserves portions of RAM or virtual memory for programs to store data, code, and variables during execution. Its main purpose is to provide processes with the exact space they need without wasting resources or causing conflicts. 
 
 **Key Objectives**
+
 It enables dynamic assignment via static (compile-time) or dynamic (runtime, e.g., malloc) methods, ensuring efficient use in multitasking environments. This prevents memory leaks, fragmentation, and crashes by tracking free/used blocks. 
 
 **Benefits**
+
 Proper allocation optimizes performance, supports larger apps through virtual memory, and allows safe sharing among processes. Without it, systems couldn't run multiple programs reliably. 
 
 **6. Describe the significance of memory deallocation.**
@@ -69,9 +81,11 @@ Proper allocation optimizes performance, supports larger apps through virtual me
 A. Memory deallocation releases RAM previously allocated to finished processes or unused data, returning it to the system's free pool for reuse. 
 
 **Key Significance**
+
 It prevents memory leaks, where unreclaimed space accumulates, starving other programs and causing slowdowns or crashes in long-running applications. Proper deallocation enables multitasking by making space available immediately, rather than waiting for OS cleanup at program exit. 
 
 **Prevents Issues**
+
 Without it, fragmentation worsens (scattered unusable gaps), reducing efficiency; techniques like merging free blocks help. In languages like C, manual free() is vital, unlike garbage-collected systems. 
 
 **7. Define fragmentation in memory management.**
@@ -85,6 +99,7 @@ A. **Fragmentation** in memory management is the inefficient use of RAM where fr
 - **Internal fragmentation**: Allocated blocks have unused space inside (e.g., fixed-size paging wastes remnants). 
 
 **Impacts**
+
 It causes allocation failures, slows performance, and wastes resources; solutions include compaction, paging, or buddy systems. 
 
 **8. What are the types of fragmentation?**
@@ -92,6 +107,7 @@ It causes allocation failures, slows performance, and wastes resources; solution
 A. There are two primary types of fragmentation in memory management: internal and external.
 
 **Internal Fragmentation**
+
 This occurs within allocated memory blocks when the assigned space exceeds what a process needs, leaving unused remnants (e.g., a 4KB page for a 3KB process wastes 1KB). Common in fixed-size partitioning like paging. 
 
 **External Fragmentation**
