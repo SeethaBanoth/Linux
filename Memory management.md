@@ -3,12 +3,15 @@
 A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. 
 
 **Core Functions**
+
 It tracks which parts of memory are free or in use, assigns memory blocks to running programs, and reclaims space when programs finish. This prevents errors like running out of memory and supports multitasking by swapping data between RAM and storage when needed. 
 
 **Why It Matters**
+
 Without proper management, systems slow down due to fragmentation (scattered free spaces) or overuse, making everything inefficient. Techniques like paging (fixed-size blocks) and segmentation (variable blocks) help optimize this.
 
 **Simple Example**
+
 Imagine RAM as a shared apartment: the OS (landlord) assigns rooms to tenants (programs), tracks who's using what, and evicts or relocates them to keep space available. [techtarget]
 
 **2. Define virtual memory.**
@@ -17,6 +20,7 @@ A.  **Virtual memory** is a memory management technique that creates the illusio
 
 
 **How It Works**
+
 Programs see a large, continuous virtual address space mapped by the MMU to physical RAM or disk. On a page fault (needed data on disk), the OS loads it into RAM, possibly evicting another page.
 
 **Benefits and Drawbacks**
@@ -602,17 +606,12 @@ A. **NRU (Not Recently Used)** page replacement algorithm classifies pages into 
 
 **Categories and Priority**
 
-| Class | R Bit | M Bit | Description              |
-
-|:-------|:-------|:-------|:--------------------------|
-
+| Class | R Bit | M Bit | Description                                           |
+|-------|-------|-------|-------------------------------------------------------|
 | 0     | 0     | 0     | Not referenced, not modified (highest priority victim) |
-
-| 1     | 0     | 1     | Not referenced, modified |
-
-| 2     | 1     | 0     | Referenced, not modified |
-
-| 3     | 1     | 1     | Referenced, modified (lowest priority)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/not-recently-used-nru-page-replacement-algorithm/)|
+| 1     | 0     | 1     | Not referenced, modified                              |
+| 2     | 1     | 0     | Referenced, not modified                              |
+| 3     | 1     | 1     | Referenced, modified (lowest priority victim)        |
 
 
 
@@ -922,19 +921,14 @@ A. Segmentation and paging are memory management techniques that map logical add
 
 **Key Differences**
 
-| Aspect            | Paging                              | Segmentation                       |
+| Aspect           | Paging                                   | Segmentation                                   |
+|------------------|-------------------------------------------|------------------------------------------------|
+| Unit Size        | Fixed size (e.g., 4KB pages/frames)       | Variable size (programmer-defined)             |
+| Fragmentation    | Internal fragmentation only               | Mainly external fragmentation                  |
+| User Visibility  | Transparent to programs                  | Visible to programmer (logical modules)       |
+| Table Structure  | Single page table per process             | Segment table with base and limit registers   |
+| Allocation       | Non-contiguous allocation allowed         | Often requires contiguous memory space        |
 
-|:-------------------|:-------------------------------------|:------------------------------------|
-
-| Unit Size        | Fixed (e.g., 4KB pages/frames)  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/) | Variable (programmer-defined)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-paging-and-segmentation/) |
-
-| Fragmentation    | Internal only                      | External mainly  [cseweb.ucsd](https://cseweb.ucsd.edu/classes/sp17/cse120-a/applications/ln/lecture11and12.html)           |
-
-| User Visibility  | Transparent to programs            | Visible (logical modules)  [tutorialspoint](https://www.tutorialspoint.com/difference-between-paging-and-segmentation)|
-
-| Table Structure  | Single page table per process      | Segment table with base/limit  [testbook](https://testbook.com/key-differences/difference-between-paging-and-segmentation) |
-
-| Allocation       | Non-contiguous OK                  | Often requires contiguous space  [enterprisestorageforum](https://www.enterprisestorageforum.com/hardware/paging-and-segmentation/)|
 
 
 
@@ -1360,17 +1354,13 @@ uint32_t status = *(volatile uint32_t *)0x10000004; // Read status reg
 
 **vs Port-mapped I/O**
 
-| MMIO | Port I/O (x86 IN/OUT) |
+| MMIO                                   | Port I/O (x86 IN/OUT)                     |
+|----------------------------------------|--------------------------------------------|
+| Uses normal LOAD/STORE instructions    | Uses special IN/OUT instructions           |
+| Shares memory address space            | Separate I/O address space (64K max)       |
+| Supported on most CPU architectures    | Specific to x86 architecture               |
+| Can be cacheable (requires UC attribute) | Never cached                               |
 
-|:------|:----------------------|
-
-| Uses LOAD/STORE instructions | Special IN/OUT instructions |
-
-| Shares memory address space | Separate I/O space (64K max) |
-
-| All CPUs supported | x86-specific |
-
-| Cacheable (needs UC attr) | Never cached |
 
 
 
@@ -1748,15 +1738,12 @@ A. Cache memory is organized into multiple levels (L1, L2, L3) and mapping types
 
 
 
-| Type | Speed | Hit Rate | Hardware Cost |
+| Type                     | Speed     | Hit Rate  | Hardware Cost |
+|--------------------------|----------|-----------|---------------|
+| Direct Mapped Cache      | Fastest  | Lowest    | Simplest      |
+| N-Way Set Associative    | Medium   | High      | Moderate      |
+| Fully Associative Cache  | Slowest  | Highest   | Complex       |
 
-|:------|:--------|:----------|:---------------|
-
-| Direct | Fastest | Lowest | Simplest |
-
-| N-way | Medium | High | Moderate |
-
-| Fully | Slowest | Highest | Complex |
 
 
 
@@ -1848,17 +1835,13 @@ A. Cache replacement policies decide which cache line to evict when a miss occur
 
 
 
-| Policy | Complexity | Miss Rate | Hardware Cost |
+| Policy     | Complexity | Miss Rate | Hardware Cost     |
+|------------|------------|-----------|--------------------|
+| Random     | Very Low   | Medium    | 0 bits             |
+| FIFO       | Low        | High      | Pointer required   |
+| PLRU       | Medium     | Low       | ~log(N) bits       |
+| True LRU   | High       | Lowest    | N bi
 
-|:--------|:------------|:-----------|:---------------|
-
-| Random | None | Medium | 0 bits |
-
-| FIFO | Low | High | Pointer |
-
-| PLRU | Medium | Low | ~log(N) bits |
-
-| True LRU | High | Lowest | N bits |
 
 
 
@@ -2182,7 +2165,7 @@ A. A segmentation fault (segfault) occurs when a program attempts to access memo
 
 
 
-## Example
+**Example**
 
 ```c
 
