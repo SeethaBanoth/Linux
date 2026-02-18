@@ -1,182 +1,86 @@
 **1. What is memory management in system programming?**
 
-
-
-A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. [scaler](https://www.scaler.com/topics/memory-management-in-operating-system/)
-
-
-
+A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. 
 **Core Functions**
-
-It tracks which parts of memory are free or in use, assigns memory blocks to running programs, and reclaims space when programs finish. This prevents errors like running out of memory and supports multitasking by swapping data between RAM and storage when needed. [testbook](https://testbook.com/ugc-net-computer-science/memory-management-in-operating-system)
-
-
-
+It tracks which parts of memory are free or in use, assigns memory blocks to running programs, and reclaims space when programs finish. This prevents errors like running out of memory and supports multitasking by swapping data between RAM and storage when needed. 
 **Why It Matters**
-
-Without proper management, systems slow down due to fragmentation (scattered free spaces) or overuse, making everything inefficient. Techniques like paging (fixed-size blocks) and segmentation (variable blocks) help optimize this. [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/memory-management-in-operating-system/)
-
-
-
+Without proper management, systems slow down due to fragmentation (scattered free spaces) or overuse, making everything inefficient. Techniques like paging (fixed-size blocks) and segmentation (variable blocks) help optimize this.
 **Simple Example**
-
-Imagine RAM as a shared apartment: the OS (landlord) assigns rooms to tenants (programs), tracks who's using what, and evicts or relocates them to keep space available. [techtarget](https://www.techtarget.com/whatis/definition/memory-management)
-
-
+Imagine RAM as a shared apartment: the OS (landlord) assigns rooms to tenants (programs), tracks who's using what, and evicts or relocates them to keep space available. [techtarget]
 
 **2. Define virtual memory.**
 
-
-
-A.  **Virtual memory** is a memory management technique that creates the illusion of having more RAM than physically available. The operating system uses part of the hard disk or SSD as an extension of RAM, swapping less-used data (pages) to disk when RAM fills up. [techtarget](https://www.techtarget.com/searchstorage/definition/virtual-memory)
-
-
-
+A.  **Virtual memory** is a memory management technique that creates the illusion of having more RAM than physically available. The operating system uses part of the hard disk or SSD as an extension of RAM, swapping less-used data (pages) to disk when RAM fills up. 
 **How It Works**
-
-Programs see a large, continuous virtual address space mapped by the MMU to physical RAM or disk. On a page fault (needed data on disk), the OS loads it into RAM, possibly evicting another page. [sciencedirect](https://www.sciencedirect.com/topics/computer-science/virtual-memory)
-
-
-
+Programs see a large, continuous virtual address space mapped by the MMU to physical RAM or disk. On a page fault (needed data on disk), the OS loads it into RAM, possibly evicting another page.
 **Benefits and Drawbacks**
-
-It enables multitasking and running big apps on limited RAM without crashes. However, disk swaps slow performance compared to pure RAM access. [savemyexams](https://www.savemyexams.com/igcse/computer-science/cie/23/revision-notes/3-hardware/data-storage/virtual-memory/)
-
-
+It enables multitasking and running big apps on limited RAM without crashes. However, disk swaps slow performance compared to pure RAM access. [savemyexams]
 
 **3. Differentiate between physical memory and virtual memory.**
 
-
-
-A. Physical memory, or RAM, is the actual hardware chips in a computer that store data for quick CPU access. Virtual memory is an OS illusion of expanded memory using disk space as RAM overflow. [blog.coolicehost](https://blog.coolicehost.com/what-is-the-difference-between-physical-and-virtual-memory/)
-
+A. Physical memory, or RAM, is the actual hardware chips in a computer that store data for quick CPU access. Virtual memory is an OS illusion of expanded memory using disk space as RAM overflow. 
 
 
 **Key Differences**
 
 | Aspect          | Physical Memory (RAM)                  | Virtual Memory                       |
 
-|-----------------|----------------------------------------|--------------------------------------|
+|:-----------------:|:----------------------------------------:|:--------------------------------------:|
 
-| Nature         | Real hardware (e.g., DRAM modules)    | Logical abstraction via disk  [blog.coolicehost](https://blog.coolicehost.com/what-is-the-difference-between-physical-and-virtual-memory/) |
+| Nature         | Real hardware (e.g., DRAM modules)    | Logical abstraction via disk |
 
-| Speed          | Very fast direct CPU access           | Slower due to disk I/O  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/virtual-memory-in-operating-system/)     |
+| Speed          | Very fast direct CPU access           | Slower due to disk I/O |
 
-| Size Limit     | Fixed by installed RAM                | Much larger, disk-dependent  [techtarget](https://www.techtarget.com/searchstorage/feature/Physical-vs-virtual-memory-How-the-two-types-compare)|
+| Size Limit     | Fixed by installed RAM                | Much larger, disk-dependent  |
 
-| Access         | Direct by CPU                         | Mapped via MMU/page tables  [stackoverflow](https://stackoverflow.com/questions/14347206/what-are-the-differences-between-virtual-memory-and-physical-memory) |
+| Access         | Direct by CPU                         | Mapped via MMU/page tables  |
 
-| Purpose        | Active program execution              | Multitasking, run larger apps  [techtarget](https://www.techtarget.com/searchstorage/definition/virtual-memory)|
+| Purpose        | Active program execution              | Multitasking, run larger apps |
 
-
-
-Physical memory holds running data; virtual enables efficient sharing without exhaustion. [lenovo](https://www.lenovo.com/in/en/glossary/physical-memory/)
-
-
+Physical memory holds running data; virtual enables efficient sharing without exhaustion. 
 
 **4. What is the role of an operating system in memory management?**
 
-
-
-A. The operating system plays a central role in memory management by efficiently allocating, tracking, and protecting RAM usage among processes. [testbook](https://testbook.com/ugc-net-computer-science/memory-management-in-operating-system)
-
-
-
+A. The operating system plays a central role in memory management by efficiently allocating, tracking, and protecting RAM usage among processes. 
 **Key Responsibilities**
-
-It keeps track of used and free memory locations, assigns blocks to programs as needed, and reclaims space when processes end. The OS also handles address translation via the MMU, preventing one process from accessing another's memory for security. [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/memory-management-in-operating-system/)
-
-
-
+It keeps track of used and free memory locations, assigns blocks to programs as needed, and reclaims space when processes end. The OS also handles address translation via the MMU, preventing one process from accessing another's memory for security.
 **Additional Functions**
-
-It implements virtual memory by swapping pages to disk during shortages, enables multitasking, and minimizes fragmentation through techniques like paging and segmentation. This boosts performance and stability. [en.wikipedia](https://en.wikipedia.org/wiki/Memory_management_(operating_systems))
-
-
+It implements virtual memory by swapping pages to disk during shortages, enables multitasking, and minimizes fragmentation through techniques like paging and segmentation. This boosts performance and stability.
 
 **5. Explain the purpose of memory allocation.**
 
-
-
-A. **Memory allocation** reserves portions of RAM or virtual memory for programs to store data, code, and variables during execution. Its main purpose is to provide processes with the exact space they need without wasting resources or causing conflicts. [phoenixnap](https://phoenixnap.com/glossary/memory-allocation)
-
-
-
+A. **Memory allocation** reserves portions of RAM or virtual memory for programs to store data, code, and variables during execution. Its main purpose is to provide processes with the exact space they need without wasting resources or causing conflicts. 
 **Key Objectives**
-
-It enables dynamic assignment via static (compile-time) or dynamic (runtime, e.g., malloc) methods, ensuring efficient use in multitasking environments. This prevents memory leaks, fragmentation, and crashes by tracking free/used blocks. [nordvpn](https://nordvpn.com/cybersecurity/glossary/memory-allocation/)
-
-
-
+It enables dynamic assignment via static (compile-time) or dynamic (runtime, e.g., malloc) methods, ensuring efficient use in multitasking environments. This prevents memory leaks, fragmentation, and crashes by tracking free/used blocks. 
 **Benefits**
-
-Proper allocation optimizes performance, supports larger apps through virtual memory, and allows safe sharing among processes. Without it, systems couldn't run multiple programs reliably. [sciencedirect](https://www.sciencedirect.com/topics/computer-science/memory-allocation)
-
-
+Proper allocation optimizes performance, supports larger apps through virtual memory, and allows safe sharing among processes. Without it, systems couldn't run multiple programs reliably. 
 
 **6. Describe the significance of memory deallocation.**
 
-
-
-A. Memory deallocation releases RAM previously allocated to finished processes or unused data, returning it to the system's free pool for reuse. [study](https://study.com/academy/lesson/memory-deallocation-definition-purpose.html)
-
-
-
+A. Memory deallocation releases RAM previously allocated to finished processes or unused data, returning it to the system's free pool for reuse. 
 **Key Significance**
-
-It prevents memory leaks, where unreclaimed space accumulates, starving other programs and causing slowdowns or crashes in long-running applications. Proper deallocation enables multitasking by making space available immediately, rather than waiting for OS cleanup at program exit. [mindstick](https://www.mindstick.com/forum/158202/how-does-a-computer-system-handle-memory-allocation-and-deallocation)
-
-
-
+It prevents memory leaks, where unreclaimed space accumulates, starving other programs and causing slowdowns or crashes in long-running applications. Proper deallocation enables multitasking by making space available immediately, rather than waiting for OS cleanup at program exit. 
 **Prevents Issues**
-
-Without it, fragmentation worsens (scattered unusable gaps), reducing efficiency; techniques like merging free blocks help. In languages like C, manual free() is vital, unlike garbage-collected systems. [sciencedirect](https://www.sciencedirect.com/topics/computer-science/memory-allocation)
-
-
+Without it, fragmentation worsens (scattered unusable gaps), reducing efficiency; techniques like merging free blocks help. In languages like C, manual free() is vital, unlike garbage-collected systems. 
 
 **7. Define fragmentation in memory management.**
 
-
-
-A. **Fragmentation** in memory management is the inefficient use of RAM where free space splits into small, scattered blocks after repeated allocations and deallocations, preventing large contiguous allocations despite enough total free memory. [ituonline](https://www.ituonline.com/tech-definitions/what-is-fragmentation-memory/)
-
-
-
+A. **Fragmentation** in memory management is the inefficient use of RAM where free space splits into small, scattered blocks after repeated allocations and deallocations, preventing large contiguous allocations despite enough total free memory. 
 **Types**
-
-- **External fragmentation**: Free memory exists in non-contiguous "holes" too small for new requests, common in variable partitioning. [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-internal-and-external-fragmentation/)
-
-- **Internal fragmentation**: Allocated blocks have unused space inside (e.g., fixed-size paging wastes remnants). [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/what-is-fragmentation-in-operating-system/)
-
-
-
+- **External fragmentation**: Free memory exists in non-contiguous "holes" too small for new requests, common in variable partitioning. 
+- **Internal fragmentation**: Allocated blocks have unused space inside (e.g., fixed-size paging wastes remnants). 
 **Impacts**
-
-It causes allocation failures, slows performance, and wastes resources; solutions include compaction, paging, or buddy systems. [ituonline](https://www.ituonline.com/tech-definitions/what-is-fragmentation/)
-
-
+It causes allocation failures, slows performance, and wastes resources; solutions include compaction, paging, or buddy systems. 
 
 **8. What are the types of fragmentation?**
 
-
-
-A. There are two primary types of fragmentation in memory management: internal and external. [ituonline](https://www.ituonline.com/tech-definitions/what-is-fragmentation-memory/)
-
-
-
+A. There are two primary types of fragmentation in memory management: internal and external.
 **Internal Fragmentation**
-
-This occurs within allocated memory blocks when the assigned space exceeds what a process needs, leaving unused remnants (e.g., a 4KB page for a 3KB process wastes 1KB). Common in fixed-size partitioning like paging. [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-internal-and-external-fragmentation/)
-
-
-
+This occurs within allocated memory blocks when the assigned space exceeds what a process needs, leaving unused remnants (e.g., a 4KB page for a 3KB process wastes 1KB). Common in fixed-size partitioning like paging. 
 **External Fragmentation**
+Free memory scatters into small, non-contiguous holes after repeated allocations/deallocations, blocking large requests despite sufficient total free space. Typical in variable partitioning like segmentation. 
 
-Free memory scatters into small, non-contiguous holes after repeated allocations/deallocations, blocking large requests despite sufficient total free space. Typical in variable partitioning like segmentation. [ituonline](https://www.ituonline.com/tech-definitions/what-is-fragmentation-memory/)
-
-
-
-Some contexts mention data fragmentation as a third type, related to inefficient data structure layouts. [slideshare](https://www.slideshare.net/slideshow/memory-fragmentation-by-ofor-williams-daniel-82483531/82483531)
+Some contexts mention data fragmentation as a third type, related to inefficient data structure layouts. 
 
 
 
@@ -188,13 +92,13 @@ A. **Internal fragmentation** occurs when a process is allocated a fixed-size me
 
 
 
-## How It Happens
+**How It Happens**
 
 In fixed partitioning or paging (e.g., 4KB pages), a 3KB process gets a full 4KB block, wasting 1KB. The inefficiency arises because memory divides into uniform chunks, not matching variable process sizes. [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-internal-and-external-fragmentation/)
 
 
 
-## Consequences and Fixes
+**Consequences and Fixes**
 
 It reduces usable RAM despite total availability, hitting performance in memory-tight systems. Solutions include smaller pages, variable allocation, or buddy systems to minimize waste. [phoenixnap](https://phoenixnap.com/glossary/internal-fragmentation)
 
@@ -290,7 +194,7 @@ A.  Paging and segmentation are two memory management schemes that handle logica
 
 | Aspect              | Paging                              | Segmentation                       |
 
-|---------------------|-------------------------------------|------------------------------------|
+|:---------------------|:-------------------------------------|:------------------------------------|
 
 | Block Size         | Fixed (e.g., 4KB pages/frames)  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/) | Variable (program-defined)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-paging-and-segmentation/) |
 
@@ -502,7 +406,7 @@ A. Page replacement algorithms decide which physical page (frame) to evict from 
 
 | Algorithm | Description | Pros/Cons |
 
-|-----------|-------------|-----------|
+|:-----------|:-------------|:-----------|
 
 | **FIFO** | Replaces oldest loaded page (queue-based).  [bunksallowed](https://www.bunksallowed.com/2023/09/page-replacement-algorithms-in-virtual-memory.html) | Simple; suffers Belady's anomaly (more frames = more faults). |
 
@@ -658,7 +562,7 @@ A. Page replacement algorithms differ in victim selection logic, performance, an
 
 | Algorithm | Basis                  | Fault Rate     | Overhead | Practical? | Key Trait                  |
 
-|-----------|------------------------|----------------|----------|------------|----------------------------|
+|:-----------|:------------------------|:----------------|:----------|:------------|:----------------------------|
 
 | **FIFO** | Arrival order         | High          | Low     | Yes       | Simple; Belady's anomaly  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/advantages-and-disadvantages-of-various-page-replacement-algorithms/) |
 
@@ -688,7 +592,7 @@ A. **NRU (Not Recently Used)** page replacement algorithm classifies pages into 
 
 | Class | R Bit | M Bit | Description              |
 
-|-------|-------|-------|--------------------------|
+|:-------|:-------|:-------|:--------------------------|
 
 | 0     | 0     | 0     | Not referenced, not modified (highest priority victim) |
 
@@ -1008,7 +912,7 @@ A. Segmentation and paging are memory management techniques that map logical add
 
 | Aspect            | Paging                              | Segmentation                       |
 
-|-------------------|-------------------------------------|------------------------------------|
+|:-------------------|:-------------------------------------|:------------------------------------|
 
 | Unit Size        | Fixed (e.g., 4KB pages/frames)  [scaler](https://www.scaler.com/topics/difference-between-paging-and-segmentation/) | Variable (programmer-defined)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-paging-and-segmentation/) |
 
@@ -1446,7 +1350,7 @@ uint32_t status = *(volatile uint32_t *)0x10000004; // Read status reg
 
 | MMIO | Port I/O (x86 IN/OUT) |
 
-|------|----------------------|
+|:------|:----------------------|
 
 | Uses LOAD/STORE instructions | Special IN/OUT instructions |
 
@@ -1834,7 +1738,7 @@ A. Cache memory is organized into multiple levels (L1, L2, L3) and mapping types
 
 | Type | Speed | Hit Rate | Hardware Cost |
 
-|------|--------|----------|---------------|
+|:------|:--------|:----------|:---------------|
 
 | Direct | Fastest | Lowest | Simplest |
 
@@ -1934,7 +1838,7 @@ A. Cache replacement policies decide which cache line to evict when a miss occur
 
 | Policy | Complexity | Miss Rate | Hardware Cost |
 
-|--------|------------|-----------|---------------|
+|:--------|:------------|:-----------|:---------------|
 
 | Random | None | Medium | 0 bits |
 
