@@ -1,9 +1,13 @@
 **1. What is memory management in system programming?**
 
-| Command | Description |
-| :--- | :---: |
-| `git status` | List all new or modified files |
-| `git diff` | Show file differences that haven't been staged |
+| Aspect       | Physical Memory (RAM)                         | Virtual Memory                                  |
+|--------------|-----------------------------------------------|------------------------------------------------|
+| Nature       | Real hardware (e.g., DRAM modules)            | Logical abstraction using disk storage         |
+| Speed        | Very fast, direct CPU access                  | Slower due to disk I/O                         |
+| Size Limit   | Fixed by installed RAM                        | Larger, depends on disk space                  |
+| Access       | Directly accessed by CPU                      | Accessed via MMU and page tables               |
+| Purpose      | Used for active program execution             | Supports multitasking and running larger apps  |
+
 
 
 A. Memory management in system programming is the process of efficiently allocating, tracking, and freeing a computer's main memory (RAM) for programs and processes. It ensures programs get the space they need without wasting resources or crashing into each other. 
