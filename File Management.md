@@ -1,4 +1,4 @@
-**1. What are the types of files present in Linux OS?**
+### 1. What are the types of files present in Linux OS?
  Linux OS treats everything as a file, with 7 main types identified by `ls -l` (first character).
 
  **Quick Reference (Markdown Table)**
