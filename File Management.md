@@ -80,7 +80,7 @@ User app → open()/read()/write()/ioctl() → Kernel driver → Hardware
 
 ### 4.Why are basic I/O calls called universal I/O calls?
 
-Basic I/O calls (`open()`, `read()`, `write()`, `close()`) are called universal because they work identically across all file types in Unix/Linux—regular files, devices, pipes, sockets, directories. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
+Basic I/O calls (`open()`, `read()`, `write()`, `close()`) are called universal because they work identically across all file types in Unix/Linux—regular files, devices, pipes, sockets, directories. 
 
 **Key Reasons**
 
@@ -549,7 +549,7 @@ fd 2 = stderr
 
 **Key Point**: **fd is just an index** into the process's fd table pointing to a `struct file` object. 
 
-### When a file opens for the first time using `open()` in your program, what does it return?
+### 19. When a file opens for the first time using `open()` in your program, what does it return?
 
 **File descriptor `3`**. 
 
@@ -589,7 +589,7 @@ etc.
 
 **Key Point**: `open()` **always returns the lowest unused fd** starting from **3** in a fresh process. FDs 0-2 are pre-occupied by stdio streams. 
 
-### Why do `read()` system calls need access to file objects?
+### 20. Why do `read()` system calls need access to file objects?
 
 `read()` needs the **`struct file`** object to access **per-open-instance state**: current position (`f_pos`), access mode (`f_mode`), and I/O operations (`f_op->read`).
 
@@ -623,7 +623,7 @@ Same inode, different file objects = different cursors
 
 **Key Point**: **`struct file`** provides **process-specific read context**; inode alone lacks position/operation info. Multiple fds → independent read streams. 
 
-### Which system call changes the cursor position without reading/writing?
+### 21. Which system call changes the cursor position without reading/writing?
 
 **`lseek()`** system call.
 
@@ -660,7 +660,7 @@ off_t pos = lseek(fd, 0, SEEK_CUR);  // Get current position
 
 **Yes**, multiple processes can open the same file simultaneously.
 
-### Can we open the same file from multiple processes? Explain the memory segment in kernel space?
+### 22. Can we open the same file from multiple processes? Explain the memory segment in kernel space?
 
 **Kernel Memory Layout (Each Process)**
 
@@ -701,7 +701,7 @@ Use flock(), fcntl() locks for synchronization
 
 **Summary**: Same file → **separate file objects** → **independent cursors** → **shared data**. 
 
-### Kernel uses which object to represent a file?
+### 23. Kernel uses which object to represent a file?
 
 The Linux kernel uses **`struct file`** (file object) to represent an **open file**. 
 
@@ -732,9 +732,11 @@ User fd → Process fd_table → **struct file** → dentry → inode → data b
 
 **One per `open()` call**—multiple processes get **separate** `struct file` objects sharing the **same inode**.
 
+### 24. Is there any limit on no. of files that can be opened from the program?
+
 **Yes**, there are multiple limits on open files per program/process.
 
-## Limits Hierarchy
+**Limits Hierarchy**
 
 | Level | Default | Command to Check | Config File |
 |-------|---------|------------------|-------------|
@@ -742,7 +744,8 @@ User fd → Process fd_table → **struct file** → dentry → inode → data b
 | **System-wide** | ~800k | `cat /proc/sys/fs/file-max` | `/etc/sysctl.conf` |
 | **Absolute max** | 1M+ | `cat /proc/sys/fs/nr_open` | Kernel compile-time |
 
-## Check Current Limits
+**Check Current Limits**
+
 ```bash
 ulimit -n              # Per-process soft limit (1024)
 ulimit -Hn             # Per-process hard limit  
@@ -750,7 +753,8 @@ cat /proc/sys/fs/file-max  # System total (~818354)
 lsof \| wc -l          # Current system usage
 ```
 
-## Increase Limits
+**Increase Limits**
+
 ```bash
 # Temporary (current session)
 ulimit -n 4096
@@ -764,7 +768,8 @@ echo "fs.file-max = 2097152" >> /etc/sysctl.conf
 sysctl -p
 ```
 
-## Error When Exceeded
+**Error When Exceeded**
+
 ```
 open(): Too many open files (EMFILE)
 ```
@@ -772,9 +777,11 @@ open(): Too many open files (EMFILE)
 
 **Key Point**: fd_table starts at **1024 slots**, grows dynamically but capped by these limits.
 
+### 25. What are the standard I/O calls? Give some examples and what is the alternate name of standard I/O call?
+
 **Yes**, there are limits on open files per program. **Alternate name**: **Universal I/O calls** or **Low-level I/O**.
 
-## Standard I/O Calls (Universal Model)
+**Standard I/O Calls (Universal Model)**
 
 | System Call | Purpose | Example |
 |-------------|---------|---------|
@@ -784,7 +791,8 @@ open(): Too many open files (EMFILE)
 | `lseek()` | Change file position | `lseek(fd, 100, SEEK_SET)` |
 | `close()` | Close fd | `close(fd)` |
 
-## Complete Flow Example
+**Complete Flow Example**
+
 ```c
 int fd = open("test.txt", O_RDWR | O_CREAT, 0644);  // fd=3
 lseek(fd, 0, SEEK_END);                              // Position
@@ -793,18 +801,21 @@ char buf [wscubetech](https://www.wscubetech.com/resources/c-programming/input-o
 close(fd);                                           // Cleanup
 ```
 
-## Why "Universal"?
+**Why "Universal"?**
+
 **Same 5 calls work for**:
 - Regular files (`file.txt`)
 - Devices (`/dev/tty`, `/dev/sda`) 
 - Pipes (`mkfifo mypipe`)
 - Sockets (`/run/docker.sock`)
 
-**Kernel dispatches** via `file->f_op->read/write()` based on file type. No device-specific code needed in user programs. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
+**Kernel dispatches** via `file->f_op->read/write()` based on file type. No device-specific code needed in user programs. 
+
+### 26. What are the basic I/O calls? Give some examples and what is the alternate name of basic I/O call?
 
 **Basic I/O calls** are the 5 universal system calls that work on all file types. **Alternate name**: **Universal I/O model**.
 
-## The 5 Basic I/O Calls
+**The 5 Basic I/O Calls**
 
 | Call | Purpose | Example |
 |------|---------|---------|
@@ -814,7 +825,8 @@ close(fd);                                           // Cleanup
 | `lseek()` | Move file pointer | `lseek(fd, 100, SEEK_SET)` |
 | `close()` | Close fd | `close(fd)` |
 
-## Complete Example
+**Complete Example**
+
 ```c
 #include <fcntl.h>
 #include <unistd.h>
@@ -828,7 +840,7 @@ int main() {
 }
 ```
 
-## Why "Universal"?
+**Why "Universal"?**
 **Same calls work for**:
 ```
 file.txt      → regular file
@@ -837,5 +849,567 @@ file.txt      → regular file
 mkfifo pipe   → named pipe
 socket        → network socket
 ```
+**Kernel routes** via `file->f_op->read/write()` based on file type. No device-specific code needed.
 
-**Kernel routes** via `file->f_op->read/write()` based on file type. No device-specific code needed. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
+### 27. What is the difference between basic I/O calls and standard I/O calls?
+
+**Basic I/O calls** = **System calls** (`open/read/write`). **Standard I/O** = **Library functions** (`fopen/fread/fwrite`).
+
+**Comparison Table**
+
+| Aspect | Basic I/O (System Calls) | Standard I/O (Library) |
+|--------|-------------------------|----------------------|
+| Functions | `open()`, `read()`, `write()`, `close()` | `fopen()`, `fread()`, `fwrite()`, `fclose()` |
+| Object | **File descriptor** (int) | **FILE*** (struct pointer) |
+| **Buffering** | **None** (direct kernel) | **Buffered** (user space) |
+| **Header** | `<fcntl.h> <unistd.h>` | `<stdio.h>` |
+| **Performance** | Faster (no copy) | Slower (double buffering) |
+| **Control** | Full (non-blocking, lseek) | Limited (higher level) |
+
+**Code Example**
+
+```c
+// Basic I/O - Direct kernel
+int fd = open("file.txt", O_RDONLY);
+char buf[100]; read(fd, buf, 100);
+close(fd);
+
+// Standard I/O - Library buffered
+FILE *fp = fopen("file.txt", "r");
+fread(buf, 1, 100, fp);
+fclose(fp);
+```
+
+**Memory Flow**
+
+```
+Basic:    user buf → kernel → device
+Standard: user buf → stdio buf → kernel → device
+```
+
+**Basic I/O** = **Universal/low-level**. **Standard I/O** = **Buffered/Portable**. Use basic for performance/control, standard for convenience.
+
+### 28. Other than basic I/O and standard I/O calls, are there any other methods to access files?
+
+**Yes**, several alternative file access methods exist.
+
+**Alternative File Access Methods**
+
+| Method | API Calls | Use Case |
+|--------|-----------|----------|
+| **Memory Mapping** | `mmap()` | Map file directly to memory (zero-copy I/O) |
+| **`mmap()` Example**<br>```c<br>fd = open("file");<br>void *mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);<br>memcpy(buf, mem+offset, len);  // Direct memory access<br>``` | Large files, databases |
+| **Direct I/O** | `open(O_DIRECT)` | Bypass page cache (database apps) |
+| **Asynchronous I/O** | `aio_read()`, `aio_write()` | Non-blocking I/O (servers) |
+| **`sendfile()`** | `sendfile(out_fd, in_fd, offset, count)` | Kernel→kernel copy (web servers) |
+| **`splice()`** | `splice(pipe, fd1, fd2)` | Zero-copy pipe transfers |
+
+**Comparison**
+
+| Method | Buffering | Speed | Complexity |
+|--------|-----------|-------|------------|
+| Basic I/O | None | Fast | Low |
+| Std I/O | User | Medium | Low |
+| **mmap** | Page cache | **Fastest** | Medium |
+| Direct I/O | None | Fast | High |
+| **sendfile** | None | **Fastest** (kernel) | Low |
+
+**Performance Winner**
+
+```
+Web server: sendfile() → 50MB/s
+mmap: 30MB/s  
+Basic I/O: 20MB/s
+Std I/O: 10MB/s
+```
+
+**Best choice**: `mmap()` for random access, `sendfile()` for streaming. 
+
+### 29. How do user space applications get access to inode object content?
+
+User space applications access inode data through **`stat()` family system calls** that return a `struct stat` with inode metadata. 
+
+**Access Methods**
+
+| System Call | Input | Returns | Inode Fields |
+|-------------|--------|---------|--------------|
+| `stat(path, &buf)` | File **path** | `struct stat` | size, perms, timestamps, **st_ino** |
+| `lstat(path, &buf)` | File **path** (symlink-aware) | `struct stat` | **Follows symlinks** |
+| `fstat(fd, &buf)` | **File descriptor** | `struct stat` | Open file metadata |
+
+**C Example**
+
+```c
+#include <sys/stat.h>
+#include <stdio.h>
+
+struct stat st;
+stat("file.txt", &st);
+printf("Inode#: %lu\n", st.st_ino);           // Inode number
+printf("Size: %ld\n", st.st_size);            // File size
+printf("Permissions: %o\n", st.st_mode & 0777); // rwx bits
+printf("Links: %ld\n", st.st_nlink);          // Hard links
+```
+
+**What User Gets in `struct stat`**
+
+```
+st_ino     → inode number  
+st_mode    → file type + permissions (S_IFREG, S_IRUSR)
+st_size    → file size in bytes
+st_nlink   → hard link count
+st_uid/st_gid → owner/group ID
+st_atime/st_mtime/st_ctime → timestamps
+st_blocks  → allocated disk blocks
+```
+
+**Internal Flow**
+
+```
+stat("file.txt") → kernel → dentry → inode → copy_to_user(&st) → userspace
+```
+
+**Root-only**: `debugfs -R "stat <12345>" /dev/sda1` for **full raw inode dump**. 
+
+**Key Point**: **`stat()` extracts inode fields** into portable `struct stat`—user never sees raw kernel `struct inode*`. 
+
+### 30. How do user space applications access kernel objects/data structures/information in kernel space?
+
+**User space cannot directly access kernel memory** (protected by MMU). Access is **indirect** via **system calls**, **procfs/sysfs**, and **special files**. 
+
+**Safe Access Methods**
+
+| Method | Example | Accesses |
+|--------|---------|----------|
+| **System Calls** | `stat()`, `open()`, `ioctl()` | Inode, file objects (filtered data) |
+| **`/proc`** | `cat /proc/<pid>/fd` | Process fd table, open files |
+| **`/sys`** | `cat /sys/block/sda/queue/nr_requests` | Kernel parameters |
+| **`/dev/mem`** (root) | `mmap("/dev/mem")` | **Raw physical memory** (dangerous) |
+
+**Common Kernel Data Exposed**
+
+| `/proc` Path | Shows |
+|--------------|-------|
+| `/proc/<pid>/fd` | Open file descriptors |
+| `/proc/<pid>/maps` | Process memory mappings |
+| `/proc/meminfo` | Kernel memory stats |
+| `/proc/slabinfo` | Slab allocator (inodes, dentries) |
+
+**Code Example: Process File Objects**
+
+```bash
+lsof -p $$          # All open fds (via /proc/$$/fd)
+cat /proc/$$/limits # Process limits
+```
+
+**Kernel → User Data Flow**
+
+```
+Kernel struct file* → sys_stat() → struct stat → copy_to_user() → userspace
+```
+
+****DANGEROUS** (Root Only)**
+
+```c
+int fd = open("/dev/mem", O_RDWR);
+void *kernel_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0xC0000000);
+*(int*)kernel_addr = 42;  // Direct kernel memory write [web:220]
+```
+
+**Key Point**: **Normal apps use syscalls** for **sanitized views**. `/proc` provides **debug info**. **Direct access** = **kernel panic** risk. **Never** dereference kernel pointers from userspace. 
+
+### 31. Which system calls access the file object (`struct file`)?
+
+**All basic I/O calls** use the file object after lookup via fd → `current->files->fdt->fd[fd]`. 
+
+**File Object Access Calls**
+
+| System Call | Accesses `struct file` Field | Purpose |
+|-------------|------------------------------|---------|
+| `read(fd, buf, count)` | `file->f_op->read`, `file->f_pos` | Read data |
+| `write(fd, buf, count)` | `file->f_op->write`, `file->f_pos` | Write data |
+| **`lseek(fd, offset, whence)`** | **`file->f_pos`** | Change position |
+| `close(fd)` | `file->f_count--` | Release reference |
+| `fcntl(fd, F_GETFL)` | `file->f_flags` | Get file flags |
+| `ioctl(fd, cmd, arg)` | `file->f_op->ioctl` | Device control |
+
+**Internal Flow**
+
+```
+read(fd=3, buf, 10)
+↓
+struct file *f = fget(3)         // fd → file object
+↓
+ssize_t bytes = f->f_op->read(f, buf, 10, &f->f_pos);
+↓
+fput(f);                         // Release reference
+```
+
+**Key Point**
+
+**`open()`** = **creates file object**
+**All other calls** = **`fget(fd)` → use file object → `fput()`**
+
+**File object fields accessed**:
+- `f_op` → operation table (read/write functions)
+- `f_pos` → current position  
+- `f_flags`/`f_mode` → open mode/behavior
+- `f_count` → reference counting
+
+**Universal model**: Same calls → different `f_op` tables per file type. 
+
+### 32. Which system calls are used to access the inode object?
+
+**`stat()`, `lstat()`, `fstat()`** system calls access inode data. 
+
+**Inode Access System Calls**
+
+| System Call | Input | Inode Access Method | Returns |
+|-------------|--------|-------------------|---------|
+| **`stat(path, &buf)`** | File **path** | Path → dentry → **inode** → `struct stat` | File metadata |
+| **`lstat(path, &buf)`** | File **path** | **Symlink-aware** inode lookup | Symlink metadata |
+| **`fstat(fd, &buf)`** | **File descriptor** | fd → `struct file` → **inode** → `struct stat` | Open file metadata |
+
+**Internal Flow**
+
+```
+stat("file.txt")
+↓
+vfs_stat() 
+↓
+path_lookup("file.txt") → dentry
+↓
+dentry → **inode** (i_op->getattr())
+↓
+copy_to_user(struct stat) ← size, perms, st_ino, timestamps
+```
+
+**What Gets Returned (`struct stat`)**
+
+```c
+struct stat {
+    dev_t     st_dev;     // Device ID
+    ino_t     st_ino;     // **Inode number**
+    mode_t    st_mode;    // Type + permissions
+    nlink_t   st_nlink;   // Hard links
+    uid_t     st_uid;     // Owner
+    off_t     st_size;    // File size
+    time_t    st_mtime;   // Modify time
+};
+```
+
+**Proof with `strace`**
+
+```bash
+strace -e trace=stat,lstat,fstat ls -l file.txt
+```
+Shows **`stat()` calls** for each file's inode data. 
+
+**Key Point**: **`stat()` family** = **primary inode access**. All other I/O calls (`read/write`) use **file objects** that reference the inode indirectly.
+
+### 33. How to print "Hello World" on screen using basic I/O calls?
+
+Use `write()` system call to **stdout** (fd=1).
+
+**Complete Program**
+
+```c
+#include <unistd.h>    // write()
+#include <string.h>    // strlen()
+
+int main() {
+    const char *msg = "Hello World\n";
+    write(1, msg, strlen(msg));  // fd=1 = stdout
+    return 0;
+}
+```
+
+**Compile & Run**
+
+```bash
+gcc -o hello hello.c
+./hello
+# Output: Hello World
+```
+
+**Breakdown**
+
+| Parameter | Value | Meaning |
+|-----------|-------|---------|
+| **fd=1** | `STDOUT_FILENO` | Terminal output |
+| **buf** | `"Hello World\n"` | Data to print |
+| **count** | `12` bytes | Length including `\n` |
+
+**Verify with `strace`**
+
+```bash
+strace -e write ./hello
+```
+```
+write(1, "Hello World\n", 12) = 12
+```
+
+**Key Points**
+
+- **No `printf()`**—direct kernel call
+- **fd=1** always available (inherits from parent)
+- **Returns bytes written** (12) or -1 on error
+- **No buffering**—immediate screen output 
+
+**One line version**:
+```c
+write(1, "Hello World\n", 12);
+```
+
+### 34. Which system call do we use to duplicate the file descriptor?
+
+**`dup()`** and **`dup2()`** system calls. 
+
+**Duplication Methods**
+
+| Call | Syntax | Behavior |
+|------|--------|----------|
+| **`dup(oldfd)`** | `int newfd = dup(5);` | **Auto-assigns lowest unused fd** |
+| **`dup2(oldfd, newfd)`** | `dup2(5, 10);` | **Forces specific fd number** (closes target first) |
+
+**Example**
+```c
+int fd = open("file.txt", O_RDONLY);  // fd=3
+int fd2 = dup(fd);                    // fd2=4 (next available)
+int fd3 = dup2(fd, 10);               // fd3=10 (exact number)
+
+read(fd, buf, 10);   // All 3 fds point to SAME file object
+read(fd2, buf, 10);  // Independent f_pos per file object
+read(fd3, buf, 10);
+```
+
+**Key Properties**
+
+- **Same `struct file` object** → **shared `f_pos`**
+- **Different fd table entries** → separate indexes
+- **close() one fd** → others still work (`f_count--`)
+
+**Shell Usage (`2>&1`)**
+
+```bash
+cmd > file 2>&1    # dup2(1, 2) → stderr → stdout
+```
+
+**Return Value**
+
+- **New fd number** on success
+- **-1** on error (`EMFILE`)
+
+**Use `dup()`** for automatic, **`dup2()`** for shell redirection. 
+
+### 35. What are the advantages of `dup()` system calls?
+
+`dup()` and `dup2()` provide **efficient file descriptor sharing** and **shell redirection** capabilities. 
+
+**Key Advantages**
+
+| Advantage | Description | Example |
+|-----------|-------------|---------|
+| **Zero-copy sharing** | **Same `struct file` object** → shared `f_pos`, no data duplication | Multiple fds read same stream |
+| **Shell redirection** | `2>&1` → `dup2(1, 2)` | stderr → stdout |
+| **Atomic replacement** | `dup2(old, new)` **closes target first** safely | `dup2(log_fd, 1)` → all printf() → log |
+| **Lowest fd guarantee** | `dup()` → **fastest available slot** | Efficient fd table usage |
+| **Reference counting** | close() one fd → others work (`f_count--`) | Safe cleanup |
+
+**Real-world Examples**
+
+**1. **Shell `ls > file 2>&1`****
+
+```
+dup2(1, 2)  # stderr → stdout → file
+```
+**2. **Logging Everything****
+
+```c
+int logfd = open("app.log", O_WRONLY|O_CREAT);
+dup2(logfd, 1);  // stdout → log
+dup2(logfd, 2);  // stderr → log
+printf("Hello"); // Goes to log!
+```
+
+**3. **Pipes (parent ↔ child)****
+
+```c
+int pipefd [en.wikipedia](https://en.wikipedia.org/wiki/Dup_(system_call)); pipe(pipefd);
+if (fork() == 0) {
+    dup2(pipefd [youtube](https://www.youtube.com/watch?v=Uz3GnFIj-mk), 1);  // Child stdout → pipe
+    execvp(cmd, args);
+}
+```
+
+**Performance Benefit**
+
+```
+Without dup: Multiple open() → multiple struct file → wasted memory
+With dup:    Single struct file → shared f_pos → memory efficient
+```
+
+**Primary Use**: **Shell redirection**, **pipes**, **logging**—**cheap fd duplication** without resource duplication. 
+
+### 36. Which object stores the ownership information of a file?
+
+**Inode object** stores file ownership information (`i_uid`, `i_gid`). 
+
+**Ownership Fields in Inode**
+
+
+| Field | Content | User Access |
+|-------|---------|-------------|
+| **`i_uid`** | **User ID** (numeric UID) | `stat.st_uid` |
+| **`i_gid`** | **Group ID** (numeric GID) | `stat.st_gid` |
+
+**View Ownership**
+
+```bash
+ls -l file.txt          # Shows username:groupname
+stat file.txt           # Shows numeric UID/GID
+ls -i file.txt          # Shows inode number
+```
+
+**C Program Access**
+
+```c
+struct stat st;
+stat("file.txt", &st);
+printf("Owner UID: %d\n", st.st_uid);     // Maps to username
+printf("Group GID: %d\n", st.st_gid);    // Maps to groupname
+```
+
+**Storage Location**
+
+```
+Filename → Directory entry → Inode# → **inode {i_uid=1000, i_gid=1000}**
+                                         ↓
+                                 /etc/passwd → "seetha:x:1000:"
+```
+
+**Key Point**: **Inode** = **permanent ownership storage**. User sees **resolved names** via `/etc/passwd` + `/etc/group`. `chown()` modifies inode `i_uid/i_gid` fields directly. 
+
+### 37. Which command displays username from a numeric UID?
+
+**`getent passwd <UID>`** or **`id -un <UID>`**. 
+
+**Quick Commands**
+
+| Command | Example | Output |
+|---------|---------|--------|
+| **`getent passwd 1000`** | `getent passwd 1000` | `seetha:x:1000:1000:...` |
+| **`id -un 1000`** | `id -un 1000` | `seetha` |
+| **`awk`** | `awk -F: '$3==1000{print $1}' /etc/passwd` | `seetha` |
+
+**Examples**
+
+```bash
+$ getent passwd 1000
+seetha:x:1000:1000:Seetha Banoth:/home/seetha:/bin/bash
+
+$ id -un 1000
+seetha
+
+$ getent passwd $(stat -c %u file.txt) | cut -d: -f1
+seetha
+```
+
+**From Inode Data**
+
+```bash
+# Get UID from file inode
+stat -c %u file.txt     # Prints numeric UID (1000)
+
+# Convert UID → username  
+getent passwd $(stat -c %u file.txt) | cut -d: -f1
+# Output: seetha
+```
+
+**`getent`** queries NSS (local + LDAP/NIS); **`id -un`** is fastest for local users.
+
+### 38. How can we see multiple user information in our Linux system?
+
+Use **`/etc/passwd`** file which stores all user account details. 
+
+**Commands to List Users**
+
+| Command | Purpose | Output |
+|---------|---------|--------|
+| **`cat /etc/passwd`** | **All users** (system + regular) | Full user records |
+| **`cut -d: -f1 /etc/passwd`** | **Usernames only** | `root\nbin\ndaemon\nseetha` |
+| **`getent passwd`** | **All users** (local + LDAP/NIS) | Network-aware users |
+| **`compgen -u`** | **Usernames** (bash built-in) | Clean username list |
+
+**Categorize Users (System vs Normal)**
+
+```bash
+# System users (UID < 1000), Normal users (UID ≥ 1000)
+awk -F: '$3 < 1000 {print "System:  ", $1} 
+         $3 >=1000 {print "Normal:  ", $1}' /etc/passwd | sort
+```
+
+**Example Output**
+```
+System:   root
+System:   bin  
+System:   daemon
+Normal:   seetha
+Normal:   ubuntu
+```
+
+**Count Users**
+
+```bash
+# Total users
+wc -l /etc/passwd          # ~70-100 lines
+
+# Normal users only  
+getent passwd {1000..60000} | wc -l
+```
+
+**Quick Summary**
+
+```bash
+echo "=== All Users ===";        cut -d: -f1 /etc/passwd
+echo "=== Normal Users ===";    awk -F: '$3>=1000{print $1}' /etc/passwd
+```
+
+**`/etc/passwd` format**: `username:password:UID:GID:comment:home:shell`. 
+
+### 39. Which command is used to change the UID and GID?
+
+**`chown`** command. 
+
+**Syntax & Examples**
+
+
+| Usage | Command | Changes |
+|-------|---------|---------|
+| **User only** | `chown seetha file.txt` | UID → seetha's UID |
+| **Group only** | `chown :developers file.txt` | GID → developers group |
+| **Both** | `chown seetha:developers file.txt` | **UID + GID** |
+| **Numeric** | `chown 1000:1001 file.txt` | UID=1000, GID=1001 |
+| **Recursive** | `chown -R seetha:devs /app/` | Directory + contents |
+
+**Verify Change**
+
+```bash
+ls -l file.txt          # Before/after
+stat -c "UID:%u GID:%g" file.txt
+```
+
+**Requires Root (usually)**
+
+```bash
+sudo chown seetha file.txt
+```
+
+**Modifies Inode Fields**
+
+```
+inode.i_uid  ← new user UID
+inode.i_gid  ← new group GID
+```
+
+**Key Point**: **`chown`** directly updates **inode ownership fields**. Only **root** or **file owner** can change ownership. 
