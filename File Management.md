@@ -1,4 +1,4 @@
-# 1. What are the types of files present in Linux OS?
+### 1. What are the types of files present in Linux OS?
 
  Linux OS treats everything as a file, with 7 main types identified by `ls -l` (first character).
 
@@ -14,7 +14,7 @@
 | Named Pipe (FIFO) | `p` | Inter-process communication | `myfifo`   |
 | Socket | `s` | Network/process communication | `/run/docker.sock`  |
 
-# 2.How do IPC Objects ,named pipes, be accessed?
+### 2.How do IPC Objects ,named pipes, be accessed?
 
 Named pipes (FIFOs) in Linux are IPC objects accessed like files via filesystem paths after creation. They enable unidirectional data flow between unrelated processes.
 
@@ -50,7 +50,7 @@ close(fd);
 ```
 Readers use `O_RDONLY`; defaults block until both ends connect. Permissions follow file modes (`chmod`, `chown`). 
 
-# 3.How does a user space application send requests to hardware using I/O calls in Linux?
+### 3.How does a user space application send requests to hardware using I/O calls in Linux?
 
 User space applications access hardware through device files using standard POSIX I/O calls, which invoke kernel drivers via system calls.
 
@@ -78,7 +78,7 @@ close(fd);
 User app → open()/read()/write()/ioctl() → Kernel driver → Hardware
 ```
 
-# 4.Why are basic I/O calls called universal I/O calls?
+### 4.Why are basic I/O calls called universal I/O calls?
 
 Basic I/O calls (`open()`, `read()`, `write()`, `close()`) are called universal because they work identically across all file types in Unix/Linux—regular files, devices, pipes, sockets, directories. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
 
@@ -97,7 +97,7 @@ cat file.txt < pipe         # Works on both files and pipes
 ```
 Device details are kernel-handled; user space sees uniform API. `ioctl()` handles special cases outside this model. 
 
-# 5.What is the content of the Inode Object?
+### 5.What is the content of the Inode Object?
 
 An Inode (index node) is a filesystem data structure storing all file metadata except the filename. It contains essential attributes for file access and management. 
 
@@ -131,7 +131,7 @@ debugfs -R "stat <inode_num>" /dev/sda1  # Full dump [web:39]
 
 **Key Point**: Filename → Directory → Inode# → Metadata+Data Blocks. 
 
-# 6. In which Object is file information stored?
+### 6. In which Object is file information stored?
 
 File information (metadata) is stored in the **Inode Object**. 
 
@@ -147,7 +147,7 @@ Filename → Directory Entry → Inode# → Metadata + Data Block Pointers
 
 **stat file.txt** shows the inode data; **ls -i** shows inode number.
 
-# 7. Which object does the kernel use to represent a file?
+### 7. Which object does the kernel use to represent a file?
 
 The Linux kernel uses the **`struct file`** (file object) to represent an **open file** in memory. 
 
@@ -173,7 +173,7 @@ struct file {
 
 **Process view**: `open()` → file descriptor → `struct file` → kernel handles I/O. Multiple processes can have different `struct file` objects pointing to same inode. 
 
-# 8. Can we access inode information from user space applications, and if yes, how?
+### 8. Can we access inode information from user space applications, and if yes, how?
 
 **Yes**, user applications can access most inode information through standard system calls and utilities. 
 
@@ -208,7 +208,7 @@ printf("Links: %ld\n", st.st_nlink);    // Hard links
 
 **Summary**: `stat()` provides 90% of practical inode data; `debugfs` gives everything. 
 
-# 9. Which system calls are used to access file information?
+### 9. Which system calls are used to access file information?
 
 Three main system calls retrieve inode/file metadata from user space. 
 
@@ -237,7 +237,7 @@ printf("Inode#: %lu, Size: %ld\n", st.st_ino, st.st_size);
 
 **`struct stat` contains**: `st_ino` (inode#), `st_size`, `st_mode` (permissions), `st_nlink`, timestamps (`st_atime`, `st_mtime`, `st_ctime`). 
 
-# 10. Which system call does the `ls` command internally invoke to access file information?
+### 10. Which system call does the `ls` command internally invoke to access file information?
 
 **`lstat()`** system call. 
 
@@ -268,7 +268,7 @@ Shows **hundreds of `lstat()` calls**—one per file.
 
 **Summary**: `lstat()` provides the inode data (`st_mode`, `st_size`, `st_uid`, etc.) that `ls` displays in long format. 
 
-# 11. What happens after the kernel finds its inode object?
+### 11. What happens after the kernel finds its inode object?
 
 After locating the inode, the kernel **allocates a `struct file` object** and **returns a file descriptor** to user space.
 
@@ -305,7 +305,7 @@ user fd → struct file → dentry → inode → data blocks [web:55]
 
 Next `read(fd)` uses `file->f_op->read()` from the inode's operation table. 
 
-# 12. What are the contents of the `struct file` object?
+### 12. What are the contents of the `struct file` object?
 
 The Linux kernel `struct file` object contains runtime information for an **open file handle**.
 
@@ -341,7 +341,7 @@ read(fd, buf, size) → current->files->fd[fd] → file → file->f_op->read(fil
 
 **Purpose**: Tracks **per-open-instance** state. Multiple processes opening same file get **separate** `struct file` objects sharing same inode. 
 
-# 13. Which object does the kernel use to represent open files?
+### 13. Which object does the kernel use to represent open files?
 
 The Linux kernel uses **`struct file`** objects to represent **open files**. 
 **Key Points**
@@ -370,7 +370,7 @@ Shows **COMMAND, PID, FD** → maps to kernel `struct file` objects.
 
 **Summary**: **`struct file`** = kernel's **handle for every open instance** of any file type (regular, device, socket, pipe). 
 
-# 14. What is the difference between the primary data and other members of the file object?
+### 14. What is the difference between the primary data and other members of the file object?
 
 **Primary data** (`f_path`/`f_dentry`) points to **shared inode metadata**; **other members** hold **per-open-instance runtime state**. 
 
@@ -392,7 +392,7 @@ Process A seeks to 1000 → file1.f_pos=1000, file2.f_pos=0 (independent)
 ```
 
 **Key Point**: Primary data links to **persistent file**; other members track **each open handle's state**. Multiple fds → separate `f_pos`, `f_flags` but shared inode access.
-# 15. Where does the file object base address get stored?
+### 15. Where does the file object base address get stored?
 
 The **`struct file` base address** is stored in the **process's file descriptor table** (`files_struct->fd_array` or `fdtable->fd[]`). 
 **Storage Hierarchy**
@@ -440,7 +440,7 @@ f->f_op->read(f, buf, 10, &f->f_pos);  // I/O operation
 
 **Key Point**: **File descriptors are just indexes** into `current->files->fdt->fd[]` array containing `struct file*` pointers. Each process maintains its own table.
 
-# 16. When is the fd table created and what is its size?
+### 16. When is the fd table created and what is its size?
 
 **Created**: When the **process is created** (fork/clone → `copy_files()` copies parent's). 
 
@@ -474,7 +474,7 @@ lsof -p $$ \| wc -l                          # Current usage
 
 **Key Point**: **Dynamic slab allocation** in kernel heap; grows as needed up to limits. 
 
-# 17. When is the file object created?
+### 17. When is the file object created?
 
 The **`struct file` object** is created **during the `open()` system call** after inode lookup succeeds. 
 
@@ -513,7 +513,7 @@ fd_install(new_fd, f);                  // Store in fd table
 
 **Key Point**: File object = **per-open-instance handle**, created **every time** `open()` succeeds.
 
-# 18. What does `open()` return?
+### 18. What does `open()` return?
 
 `open()` returns a **file descriptor** (non-negative integer) on success, or **-1** on error. 
 
@@ -549,11 +549,11 @@ fd 2 = stderr
 
 **Key Point**: **fd is just an index** into the process's fd table pointing to a `struct file` object. 
 
-# When a file opens for the first time using `open()` in your program, what does it return?
+### When a file opens for the first time using `open()` in your program, what does it return?
 
 **File descriptor `3`**. 
 
-## Why fd=3?
+**Why fd=3?**
 
 ```
 fd 0 = stdin  (already open)
@@ -562,14 +562,14 @@ fd 2 = stderr (already open)
 **fd 3 = FIRST available** ← open() returns this
 ```
 
-## Example
+**Example**
 
 ```c
 int fd = open("file.txt", O_RDONLY);  // Returns 3
 printf("fd = %d\n", fd);              // fd = 3
 ```
 
-## Proof
+**Proof**
 
 ```bash
 strace ./your_program
@@ -579,7 +579,7 @@ Shows:
 open("file.txt", O_RDONLY) = 3
 ```
 
-## Subsequent opens
+**Subsequent opens**
 
 ```
 2nd open() → fd=4
@@ -588,3 +588,254 @@ etc.
 ```
 
 **Key Point**: `open()` **always returns the lowest unused fd** starting from **3** in a fresh process. FDs 0-2 are pre-occupied by stdio streams. 
+
+### Why do `read()` system calls need access to file objects?
+
+`read()` needs the **`struct file`** object to access **per-open-instance state**: current position (`f_pos`), access mode (`f_mode`), and I/O operations (`f_op->read`).
+
+**Essential Data from File Object**
+
+| Field | Why Needed? |
+|-------|-------------|
+| **`f_pos`** | **Current read position**—maintains file pointer between calls |
+| **`f_op->read`** | **Actual read function** (different for files/pipes/devices) |
+| **`f_mode`** | Check read permission (`FMODE_READ`) |
+| **`f_flags`** | Handle `O_NONBLOCK`, `O_APPEND` behaviors |
+
+**Flow**
+
+```
+read(fd=3, buf, 10)
+↓ fd_table [reddit](https://www.reddit.com/r/cprogramming/comments/1alzyf8/how_do_the_system_call_read_remembers_where_it/) → struct file*
+↓ 
+file->f_op->read(file, buf, 10, &file->f_pos)
+     ↑              ↑      ↑        ↑
+   operations    buffer  count  position ptr
+```
+
+**Why Not Just Inode?**
+
+```
+Process A: read(fd3) → f_pos=100
+Process B: read(fd4) → f_pos=0   ← Independent positions!
+Same inode, different file objects = different cursors
+```
+
+**Key Point**: **`struct file`** provides **process-specific read context**; inode alone lacks position/operation info. Multiple fds → independent read streams. 
+
+### Which system call changes the cursor position without reading/writing?
+
+**`lseek()`** system call.
+
+**Syntax**
+
+```c
+off_t lseek(int fd, off_t offset, int whence);
+```
+
+**`whence` Values**
+
+| Constant | Meaning | Position After |
+|----------|---------|----------------|
+| `SEEK_SET` | From **start** of file | `offset` bytes from beginning |
+| `SEEK_CUR` | From **current** position | `current + offset` |
+| `SEEK_END` | From **end** of file | `EOF + offset` |
+
+**Example**
+
+```c
+int fd = open("file.txt", O_RDWR);
+lseek(fd, 100, SEEK_SET);    // Move to byte 100
+lseek(fd, 10, SEEK_CUR);     // Move 10 bytes forward
+lseek(fd, 0, SEEK_END);      // Move to end of file
+off_t pos = lseek(fd, 0, SEEK_CUR);  // Get current position
+```
+
+**Returns**
+
+- **New cursor position** (from start of file) on success
+- **-1** on error (`errno` set)
+
+**Key Point**: **`lseek()` only changes `file->f_pos`** in the `struct file` object—no data transfer. Perfect for random access without I/O. 
+
+**Yes**, multiple processes can open the same file simultaneously.
+
+### Can we open the same file from multiple processes? Explain the memory segment in kernel space?
+
+**Kernel Memory Layout (Each Process)**
+
+```
+Process A              Kernel Space           Filesystem
+  fd_table [stackoverflow](https://stackoverflow.com/questions/7842511/safe-to-have-multiple-processes-writing-to-the-same-file-at-the-same-time-cent) ────────> struct file A ───────> inode
+Process B                    ↑
+  fd_table [stackoverflow](https://stackoverflow.com/questions/7842511/safe-to-have-multiple-processes-writing-to-the-same-file-at-the-same-time-cent) ────────> struct file B ───────> inode (shared)
+```
+
+**Key Objects Created**
+
+| Object | Per Process | Shared | Contains |
+|--------|-------------|--------|----------|
+| **`fd_table`** | **Yes** | No | fd → file* mapping |
+| **`struct file`** | **Yes** | No | **Independent** `f_pos`, `f_flags` |
+| **`inode`** | No | **Yes** | File data blocks, metadata |
+
+**Independent State**
+
+```
+Process A: lseek(fd, 100); read(fd) → reads from byte 100
+Process B: lseek(fd, 0);   read(fd) → reads from byte 0
+```
+
+**Each process gets**:
+
+1. **Own `struct file`** (separate file pointers)
+2. **Own fd_table** entry pointing to its file object
+3. **Shared inode** (actual file data/metadata)
+
+**Race Conditions**
+
+```
+No automatic locking → concurrent read/write corrupts data
+Use flock(), fcntl() locks for synchronization
+```
+
+**Summary**: Same file → **separate file objects** → **independent cursors** → **shared data**. 
+
+### Kernel uses which object to represent a file?
+
+The Linux kernel uses **`struct file`** (file object) to represent an **open file**. 
+
+**Object Hierarchy**
+
+```
+User fd → Process fd_table → **struct file** → dentry → inode → data blocks
+```
+
+**Key Distinctions**
+
+| Object | Purpose | Lifetime |
+|--------|---------|----------|
+| **`struct file`** | **Open file handle** (kernel view) | `open()` → `close()` |
+| `struct inode` | File metadata (disk + cache) | File existence |
+| `struct dentry` | Directory entry (filename→inode) | Path caching |
+
+**Contains Runtime State**
+
+- `f_pos`: Current read/write position
+- `f_op`: read/write/ioctl function pointers  
+- `f_flags`: O_RDONLY, O_APPEND, etc.
+- `f_dentry`: → inode via directory entry
+
+**Created**: During `open()` system call via `alloc_file()`
+**Accessed**: `read(fd)` → `current->files->fdt->fd[fd] → struct file*`
+**Destroyed**: When `f_count → 0` (all fds closed)
+
+**One per `open()` call**—multiple processes get **separate** `struct file` objects sharing the **same inode**.
+
+**Yes**, there are multiple limits on open files per program/process.
+
+## Limits Hierarchy
+
+| Level | Default | Command to Check | Config File |
+|-------|---------|------------------|-------------|
+| **Per-process** | **1024** | `ulimit -n` | `/etc/security/limits.conf` |
+| **System-wide** | ~800k | `cat /proc/sys/fs/file-max` | `/etc/sysctl.conf` |
+| **Absolute max** | 1M+ | `cat /proc/sys/fs/nr_open` | Kernel compile-time |
+
+## Check Current Limits
+```bash
+ulimit -n              # Per-process soft limit (1024)
+ulimit -Hn             # Per-process hard limit  
+cat /proc/sys/fs/file-max  # System total (~818354)
+lsof \| wc -l          # Current system usage
+```
+
+## Increase Limits
+```bash
+# Temporary (current session)
+ulimit -n 4096
+
+# Permanent per-user
+echo "* soft nofile 65536" >> /etc/security/limits.conf
+echo "* hard nofile 65536" >> /etc/security/limits.conf
+
+# System-wide
+echo "fs.file-max = 2097152" >> /etc/sysctl.conf
+sysctl -p
+```
+
+## Error When Exceeded
+```
+open(): Too many open files (EMFILE)
+```
+**Program hits `ulimit -n` first**, then system `file-max`.
+
+**Key Point**: fd_table starts at **1024 slots**, grows dynamically but capped by these limits.
+
+**Yes**, there are limits on open files per program. **Alternate name**: **Universal I/O calls** or **Low-level I/O**.
+
+## Standard I/O Calls (Universal Model)
+
+| System Call | Purpose | Example |
+|-------------|---------|---------|
+| `open()` | Open file → returns fd | `open("file.txt", O_RDONLY)` |
+| `read()` | Read from fd | `read(fd, buf, 1024)` |
+| `write()` | Write to fd | `write(fd, "data", 4)` |
+| `lseek()` | Change file position | `lseek(fd, 100, SEEK_SET)` |
+| `close()` | Close fd | `close(fd)` |
+
+## Complete Flow Example
+```c
+int fd = open("test.txt", O_RDWR | O_CREAT, 0644);  // fd=3
+lseek(fd, 0, SEEK_END);                              // Position
+write(fd, "Hello", 5);                               // Write
+char buf [wscubetech](https://www.wscubetech.com/resources/c-programming/input-output); read(fd, buf, 10);                     // Read
+close(fd);                                           // Cleanup
+```
+
+## Why "Universal"?
+**Same 5 calls work for**:
+- Regular files (`file.txt`)
+- Devices (`/dev/tty`, `/dev/sda`) 
+- Pipes (`mkfifo mypipe`)
+- Sockets (`/run/docker.sock`)
+
+**Kernel dispatches** via `file->f_op->read/write()` based on file type. No device-specific code needed in user programs. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
+
+**Basic I/O calls** are the 5 universal system calls that work on all file types. **Alternate name**: **Universal I/O model**.
+
+## The 5 Basic I/O Calls
+
+| Call | Purpose | Example |
+|------|---------|---------|
+| `open()` | Open file → get fd | `open("file.txt", O_RDONLY)` → fd=3 |
+| `read()` | Read from fd | `read(fd, buf, 1024)` |
+| `write()` | Write to fd | `write(fd, "data", 4)` |
+| `lseek()` | Move file pointer | `lseek(fd, 100, SEEK_SET)` |
+| `close()` | Close fd | `close(fd)` |
+
+## Complete Example
+```c
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int fd = open("test.txt", O_RDWR | O_CREAT, 0644);  // 1. OPEN
+    write(fd, "Hello", 5);                              // 2. WRITE  
+    lseek(fd, 0, SEEK_SET);                            // 3. LSEEK
+    char buf [profile.iiita.ac](https://profile.iiita.ac.in/bibhas.ghoshal/lab_files/System%20calls%20for%20files%20and%20directories%20in%20Linux.html); read(fd, buf, 10);                   // 4. READ
+    close(fd);                                         // 5. CLOSE
+}
+```
+
+## Why "Universal"?
+**Same calls work for**:
+```
+file.txt      → regular file
+/dev/tty      → terminal device  
+/dev/sda      → disk device
+mkfifo pipe   → named pipe
+socket        → network socket
+```
+
+**Kernel routes** via `file->f_op->read/write()` based on file type. No device-specific code needed. [hackmd](https://hackmd.io/@happy-kernel-learning/SJDeNr7OI)
