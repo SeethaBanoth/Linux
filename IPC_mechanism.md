@@ -84,7 +84,8 @@
 
 **Question:** What is difference between Named Pipe and Message Queue?
 
-**Answer:** | Aspect | Named Pipes (FIFOs) | Message Queues |
+**Answer:** 
+| Aspect | Named Pipes (FIFOs) | Message Queues |
 |--------|---------------------|----------------|
 | Communication | Unidirectional byte stream  | Bidirectional structured messages with types/priorities  |
 | Creation | `mkfifo()` creates filesystem entry   | `msgget()` creates kernel queue ID   |
@@ -112,15 +113,16 @@
 
 **Question:** Difference between Shared Memory and Message Queues?
 
-**Answer:** | Aspect | Shared Memory | Message Queues |
+**Answer:** 
+| Aspect | Shared Memory | Message Queues |
 |--------|---------------|----------------|
 | Data Access | Direct memory read/write (fastest) | Kernel-mediated send/receive syscalls   |
 | Synchronization | Manual (semaphores/mutexes required) | Built-in by kernel   |
 | Data Structure | Raw bytes/arbitrary structures | Structured messages with types  |
-| Performance | Highest throughput, low latency   | Slower due to copying/context switches  [stackoverflow](https://stackoverflow.com/questions/2287965/difference-between-message-queue-and-shared-memory) |
-| Creation | `shmget()` → `shmat()` | `msgget()`  [tldp](https://tldp.org/LDP/lpg/node34.html) |
-| Coupling | Tightly coupled processes | Decoupled sender/receiver  [youtube](https://www.youtube.com/watch?v=hae4nJEDskg)|
-| Use Case | Large data, high-performance | Reliable, ordered small messages  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-shared-memory-model-and-message-passing-model-in-ipc/)
+| Performance | Highest throughput, low latency   | Slower due to copying/context switches |
+| Creation | `shmget()` → `shmat()` | `msgget()`   |
+| Coupling | Tightly coupled processes | Decoupled sender/receiver  |
+| Use Case | Large data, high-performance | Reliable, ordered small messages  |
 
 **Question:** What is use of stat command?
 
@@ -156,14 +158,15 @@
 
 **Question:** What is the difference between mutex locks and semaphores?
 
-**Answer:** | Aspect | Mutex | Semaphore |
+**Answer:** 
+| Aspect | Mutex | Semaphore |
 |--------|-------|-----------|
-| Purpose | Mutual exclusion (lock for 1 thread)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/mutex-vs-semaphore/) | Counting/signaling (N resources)  [byjus](https://byjus.com/gate/difference-between-semaphore-and-mutex/) |
-| Type | Object with ownership | Integer counter  [byjus](https://byjus.com/gate/difference-between-semaphore-and-mutex/) |
-| Operations | lock()/unlock() by owner only | wait(P)/signal(V) by any process  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/mutex-vs-semaphore/) |
-| Access | Only lock owner unlocks | Any process can signal  [stackoverflow](https://stackoverflow.com/questions/62814/difference-between-binary-semaphore-and-mutex) |
-| Use Case | Single resource protection | Multiple identical resources  [baeldung](https://www.baeldung.com/cs/semaphore-vs-mutex) |
-| Priority Inversion | Yes (owner tracking) | Less likely  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/mutex-vs-semaphore/) |
+| Purpose | Mutual exclusion (lock for 1 thread) | Counting/signaling (N resources)   |
+| Type | Object with ownership | Integer counter  |
+| Operations | lock()/unlock() by owner only | wait(P)/signal(V) by any process   |
+| Access | Only lock owner unlocks | Any process can signal   |
+| Use Case | Single resource protection | Multiple identical resources   |
+| Priority Inversion | Yes (owner tracking) | Less likely  |
 
 **Question:** What is meant by Race Condition?
 
@@ -179,15 +182,16 @@
 
 **Question:** What is the difference between system v and POSIX?
 
-**Answer:** | Aspect | System V IPC | POSIX IPC |
+**Answer:**
+| Aspect | System V IPC | POSIX IPC |
 |--------|--------------|-----------|
-| Age/Origin | Older (1983), legacy standard  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) | Newer, portable standard  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) |
-| Identification | Numeric keys/IDs (msgget/shmget)  [stackoverflow](https://stackoverflow.com/questions/4582968/system-v-ipc-vs-posix-ipc) | ASCII names/file descriptors  [stackoverflow](https://stackoverflow.com/questions/4582968/system-v-ipc-vs-posix-ipc) |
-| Thread Safety | Not thread-safe  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) | Thread-safe (mutexes, cond vars)  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) |
-| Shared Memory | shmget/shmat/shmdt/shmctl  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) | shm_open/mmap/shm_unlink  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) |
-| Deletion | Manual (ipcrm/shmctl IPC_RMID)  [ranler.github](http://ranler.github.io/2013/07/01/System-V-and-POSIX-IPC/) | Reference-counted unlink  [ranler.github](http://ranler.github.io/2013/07/01/System-V-and-POSIX-IPC/) |
-| Monitoring | Limited (ipcs command)  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) | select/poll/epoll + mq_notify  [scribd](https://www.scribd.com/document/849862197/2-6-POSIX-vs-System-V) |
-| API Style | Complex, separate syscalls  [ranler.github](http://ranler.github.io/2013/07/01/System-V-and-POSIX-IPC/) | File-like (open/read/write)  [ranler.github](http://ranler.github.io/2013/07/01/System-V-and-POSIX-IPC/) |
+| Age/Origin | Older (1983), legacy standard  | Newer, portable standard   |
+| Identification | Numeric keys/IDs (msgget/shmget)  | ASCII names/file descriptors  |
+| Thread Safety | Not thread-safe  | Thread-safe (mutexes, cond vars)  |
+| Shared Memory | shmget/shmat/shmdt/shmctl  | shm_open/mmap/shm_unlink   |
+| Deletion | Manual (ipcrm/shmctl IPC_RMID)   | Reference-counted unlink   |
+| Monitoring | Limited (ipcs command)  | select/poll/epoll + mq_notify   |
+| API Style | Complex, separate syscalls   | File-like (open/read/write)   |
 
 **Question:** Describe the steps involved in creating and using a named pipe (FIFO) for IPC
 
@@ -207,4 +211,3 @@
 4. Parent process: Close read end `close(pipefd[0])`; write data `write(pipefd [support](https://support.tools/linux-pipes-ipc-mastery/), buf, size)`; close write end; `wait()` for child. 
 
 5. Pipe auto-destroys when both FDs closed (no explicit cleanup needed).
-6. 
