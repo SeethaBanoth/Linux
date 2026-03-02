@@ -60,14 +60,15 @@
 
 **Question:** Difference between the Named Pipes and Pipes?
 
-**Answer:** | Aspect | Regular Pipes | Named Pipes (FIFOs) |
-|--------|---------------|---------------------|
-| Creation | `pipe()` system call | `mkfifo()` or `mknod()`  |
-| Visibility | No filesystem entry; anonymous FDs | Filesystem special file (e.g., `/tmp/pipe`)  |
-| Process Relation | Related processes only (parent-child via fork)   | Unrelated processes   |
-| Lifetime | Destroyed when all FDs closed | Persists until explicitly removed (`unlink()`)  |
-| Access | Inherited via fork | Opened by pathname with permissions   |
-| Reusability | Single use per creation | Reusable across multiple process pairs   |
+**Answer:** 
+| Aspect | Regular Pipes | Named Pipes (FIFOs) |
+|---|---|---|
+| Creation | `pipe()` system call | `mkfifo()` or `mknod()` |
+| Visibility | No filesystem entry; anonymous FDs | Filesystem special file (e.g., `/tmp/pipe`) |
+| Process Relation | Related processes only (parent-child via fork) | Unrelated processes |
+| Lifetime | Destroyed when all FDs closed | Persists until explicitly removed (`unlink()`) |
+| Access | Inherited via fork | Opened by pathname with permissions |
+| Reusability | Single use per creation | Reusable across multiple process pairs |
 
 **Question:** What is return value of read system call?
 
