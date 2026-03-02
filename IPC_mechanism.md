@@ -85,13 +85,13 @@
 
 **Answer:** | Aspect | Named Pipes (FIFOs) | Message Queues |
 |--------|---------------------|----------------|
-| Communication | Unidirectional byte stream  [tutorialspoint](https://www.tutorialspoint.com/difference-between-pipes-and-message-queues) | Bidirectional structured messages with types/priorities  [tutorialspoint](https://www.tutorialspoint.com/difference-between-pipes-and-message-queues) |
-| Creation | `mkfifo()` creates filesystem entry  [tutorialspoint](https://www.tutorialspoint.com/unix_commands/mkfifo.htm) | `msgget()` creates kernel queue ID  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/ipc-using-message-queues/) |
-| Data Order | Strict FIFO  [courses.cs.vt](https://courses.cs.vt.edu/cs3214/spring2025/questions/namedpipes) | Selective retrieval by message type  [tutorialspoint](https://www.tutorialspoint.com/difference-between-pipes-and-message-queues) |
-| Process Relation | Any processes via pathname  [en.wikipedia](https://en.wikipedia.org/wiki/Named_pipe) | Unrelated processes via queue ID  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/ipc-using-message-queues/) |
-| Persistence | Until `unlink()`  [courses.cs.vt](https://courses.cs.vt.edu/cs3214/spring2025/questions/namedpipes) | Until `msgctl(IPC_RMID)`  [docs.oracle](https://docs.oracle.com/cd/E19683-01/816-5042/6mb7bck61/index.html) |
-| Size Limit | Pipe buffer (~4KB/page)  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-pipes-and-message-queues/) | Per-message limit (~8KB), queue configurable  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-pipes-and-message-queues/) |
-| API Style | File I/O: `open/read/write`  [geeksforgeeks](https://www.geeksforgeeks.org/cpp/named-pipe-fifo-example-c-program/) | Message-specific: `msgsnd/msgrcv`  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/ipc-using-message-queues/) |
+| Communication | Unidirectional byte stream  | Bidirectional structured messages with types/priorities  |
+| Creation | `mkfifo()` creates filesystem entry   | `msgget()` creates kernel queue ID   |
+| Data Order | Strict FIFO   | Selective retrieval by message type  |
+| Process Relation | Any processes via pathname  | Unrelated processes via queue ID  |
+| Persistence | Until `unlink()`   | Until `msgctl(IPC_RMID)`  |
+| Size Limit | Pipe buffer (~4KB/page)  | Per-message limit (~8KB), queue configurable  |
+| API Style | File I/O: `open/read/write`   | Message-specific: `msgsnd/msgrcv`   |
 
 **Question:** What is the system call used to create the message queue?
 
@@ -113,10 +113,10 @@
 
 **Answer:** | Aspect | Shared Memory | Message Queues |
 |--------|---------------|----------------|
-| Data Access | Direct memory read/write (fastest) | Kernel-mediated send/receive syscalls  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/ipc-shared-memory/) |
-| Synchronization | Manual (semaphores/mutexes required) | Built-in by kernel  [youtube](https://www.youtube.com/watch?v=hae4nJEDskg) |
-| Data Structure | Raw bytes/arbitrary structures | Structured messages with types  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/ipc-using-message-queues/) |
-| Performance | Highest throughput, low latency  [howtech.substack](https://howtech.substack.com/p/ipc-mechanisms-shared-memory-vs-message) | Slower due to copying/context switches  [stackoverflow](https://stackoverflow.com/questions/2287965/difference-between-message-queue-and-shared-memory) |
+| Data Access | Direct memory read/write (fastest) | Kernel-mediated send/receive syscalls   |
+| Synchronization | Manual (semaphores/mutexes required) | Built-in by kernel   |
+| Data Structure | Raw bytes/arbitrary structures | Structured messages with types  |
+| Performance | Highest throughput, low latency   | Slower due to copying/context switches  [stackoverflow](https://stackoverflow.com/questions/2287965/difference-between-message-queue-and-shared-memory) |
 | Creation | `shmget()` → `shmat()` | `msgget()`  [tldp](https://tldp.org/LDP/lpg/node34.html) |
 | Coupling | Tightly coupled processes | Decoupled sender/receiver  [youtube](https://www.youtube.com/watch?v=hae4nJEDskg)|
 | Use Case | Large data, high-performance | Reliable, ordered small messages  [geeksforgeeks](https://www.geeksforgeeks.org/operating-systems/difference-between-shared-memory-model-and-message-passing-model-in-ipc/)
